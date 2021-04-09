@@ -3,6 +3,25 @@ GLSL Demo
 
 Real Time 3D Demo made in 2008
 
+Port for linux & How to compile
+-----
+This repo is forked from original repo at
+https://github.com/yagero/glsl-demo
+But here is added support (port) for linux.
+
+Dependencies:
+
+OpenGL, GLU, GLUT, GLEW
+
+Steps:
+
+* `mkdir build`
+* `cd build`
+* `cmake ..`
+* `make`
+* `cd ../exec/`
+* `./glsl_demo`
+
 
 Video
 -----
