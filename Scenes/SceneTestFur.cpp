@@ -1,3 +1,6 @@
+
+#include <cstring>
+
 #include "SceneTestFur.h"
 
 #include "../Mathlib.h"
@@ -279,6 +282,3 @@ void SceneTestFur::Render()
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 }
-
-
-

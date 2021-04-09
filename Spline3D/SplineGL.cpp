@@ -91,7 +91,8 @@ void SplineGL::DrawGL()
 	{
 		glBegin(GL_LINE_STRIP);
 		for(float t=0.0f; t<1.0f; t+=step) {
-			glVertex3fv( &(m_pSpline->getPoint(t).x) );
+			vec3 point = m_pSpline->getPoint(t);
+			glVertex3fv((const GLfloat *)&point);
 		}
 		glEnd();
 
@@ -106,5 +107,3 @@ void SplineGL::DrawGL()
 
 	glPopAttrib();
 }
-
-

@@ -13,7 +13,9 @@
 //
 // Copyright (c) 2005 Song Ho Ahn
 ///////////////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #include <windows.h>
+#endif
 #include <GL/glew.h>
 #include <iostream>
 #include <sstream>

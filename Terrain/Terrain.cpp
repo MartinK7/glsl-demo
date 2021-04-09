@@ -59,15 +59,15 @@ void Terrain::Load(const std::string& heightmap, const BoundingBox& bbox, GLuint
 	assert(data!=NULL);
 
 
-	// Taille du terrain à créer
+	// Taille du terrain ï¿½ crï¿½er
 	m_BBox = bbox;
 
 	// Taille de l'image
 	GLuint nIMGWidth = m_nHMWidth;
 	GLuint nIMGHeight = m_nHMHeight;
 
-	// La heightmap doit être de taille impaire
-	// afin de pouvoir la découper dans le quadtree
+	// La heightmap doit ï¿½tre de taille impaire
+	// afin de pouvoir la dï¿½couper dans le quadtree
 	if(m_nHMWidth%2==0)		m_nHMWidth++;
 	if(m_nHMHeight%2==0)	m_nHMHeight++;
 
@@ -76,14 +76,14 @@ void Terrain::Load(const std::string& heightmap, const BoundingBox& bbox, GLuint
 	tPosition.resize(m_nHMWidth*m_nHMHeight);
 	for(GLuint j=0; j<m_nHMHeight; j++) {
 		for(GLuint i=0; i<m_nHMWidth; i++) {
-			// Coordonnées de longueur et largeur
+			// Coordonnï¿½es de longueur et largeur
 			GLuint idxHM = COORD(i,j,m_nHMWidth);
 			tPosition[idxHM].x = m_BBox.min.x + ((float)i) * (m_BBox.max.x - m_BBox.min.x)/(m_nHMWidth-1);
 			tPosition[idxHM].z = m_BBox.min.z + ((float)j) * (m_BBox.max.z - m_BBox.min.z)/(m_nHMHeight-1);
 
-			// Coordonnées de hauteur
+			// Coordonnï¿½es de hauteur
 			// Comme on a peut etre agrandie la heightmap pour la rendre impaire,
-			// on va peut être aller d'un cran trop loin dans l'image
+			// on va peut ï¿½tre aller d'un cran trop loin dans l'image
 			GLuint idxIMG = COORD(	i<nIMGWidth? i : i-1,
 									j<nIMGHeight? j : j-1,
 									nIMGWidth);
@@ -151,12 +151,12 @@ void Terrain::Load(const std::string& heightmap, const BoundingBox& bbox, GLuint
 		}
 	}
 
-	// Génération du VBO
+	// Gï¿½nï¿½ration du VBO
 	m_pGroundVBO->Create(GL_STATIC_DRAW);
 	std::cout << "Loading Terrain OK" << std::endl;
 
 
-	// Génération du Quadtree
+	// Gï¿½nï¿½ration du Quadtree
 	std::cout << "Loading Quadtree..." << std::endl;
 	m_pQuadtree = new Quadtree();
 	m_pQuadtree->Build(&m_BBox, ivec2(m_nHMWidth, m_nHMHeight), chunkSize);
@@ -186,18 +186,21 @@ bool Terrain::GenerateVegetation(const ImageTools::ImageData& map, unsigned int 
 		ivec3 map_color = map.getColor(map_x, map_y);
 
 		if(map_color.blue < 25) {
-			k--;
+//			k--; // Some bug
+#warning Fix This! Code will otherwise stuck here.
 			continue;
 		}
 
 		vec3 P = getPosition(x, y);
 
 		if(P.y < var.getf("water_height")) {
-			k--;
+//			k--; // Some bug
+#warning Fix This! Code will otherwise stuck here.
 			continue;
 		}
 
-		QuadtreeNode* node = m_pQuadtree->FindLeaf(vec2(P.x, P.z));
+		vec2 point = vec2(P.x, P.z);
+		QuadtreeNode* node = m_pQuadtree->FindLeaf(point);
 		assert(node);
 		TerrainChunk* chunk = node->getChunk();
 		assert(chunk);
@@ -249,7 +252,8 @@ bool Terrain::GenerateGrass(const ImageTools::ImageData& map, unsigned int densi
 
 		ivec3 map_color = map.getColor(map_x, map_y);
 		if(map_color.green < 150) {
-			k--;
+//			k--; // Some bug
+			#warning Fix This! Code will otherwise stuck here.
 			continue;
 		}
 
@@ -263,7 +267,8 @@ bool Terrain::GenerateGrass(const ImageTools::ImageData& map, unsigned int densi
 			vec3 B = Cross(N, T);
 
 			if(N.y < 0.8f) {
-				k--;
+//			k--; // Some bug
+#warning Fix This! Code will otherwise stuck here.
 				continue;
 			}
 			else {
@@ -272,7 +277,8 @@ bool Terrain::GenerateGrass(const ImageTools::ImageData& map, unsigned int densi
 
 				GLuint idx = (GLuint)m_pGrassVBO->getPosition().size();
 
-				QuadtreeNode* node = m_pQuadtree->FindLeaf(vec2(P.x, P.z));
+				vec2 point = vec2(P.x, P.z);
+				QuadtreeNode* node = m_pQuadtree->FindLeaf(point);
 				assert(node);
 				TerrainChunk* chunk = node->getChunk();
 				assert(chunk);
@@ -434,6 +440,3 @@ int Terrain::DrawGround(bool bReflection)
 // GL_TRIANGLE_STRIP avec VA : 23 FPS
 // GL_TRIANGLE_STRIP avec VBO : 60 FPS
 //////////////////////////////////////////////////////////////
-
-
-

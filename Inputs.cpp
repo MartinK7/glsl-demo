@@ -1,5 +1,6 @@
 #include "Inputs.h"
 #include <GL/glut.h>
+#include <cstring>
 
 Inputs::Inputs()
 {
@@ -28,5 +29,3 @@ void Inputs::KeyboardFunc(unsigned char key)	{	tBoard[key]   = GL_TRUE;	}
 void Inputs::KeyboardUpFunc(unsigned char key)	{	tBoard[key]   = GL_FALSE;	}
 void Inputs::SpecialFunc(int key)				{	tSpecial[key] = GL_TRUE;	}
 void Inputs::SpecialUpFunc(int key)				{	tSpecial[key] = GL_FALSE;	}
-
-

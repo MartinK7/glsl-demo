@@ -10,9 +10,15 @@
 #include <fstream>
 #include <string>
 #include <assert.h>
+#include <cstring>
 
 #undef _UNICODE
 #include "IL/il.h"
+
+#ifdef UNIX
+	#define STB_IMAGE_IMPLEMENTATION
+	#include "stb_image.h"
+#endif
 
 
 namespace ImageTools {
@@ -68,6 +74,19 @@ GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int
 
 GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
+	#ifdef UNIX
+	int width = 0, height = 0, channels = 0;
+	unsigned char *imagePixels = stbi_load(filename.c_str(), &width, &height, &channels, 3);
+
+	if(!imagePixels)
+		return 0;
+
+	w = width;
+	h = height;
+	d = channels;
+
+	return imagePixels;
+#else
 	static bool first = true;
 	if(first) {
 		first = false;
@@ -81,21 +100,21 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
 
 		ilEnable(IL_TYPE_SET);
 		ilTypeFunc(IL_UNSIGNED_BYTE);
-		
+
 
 	}
 
-    // Génération d'une nouvelle texture
+    // Gï¿½nï¿½ration d'une nouvelle texture
     ILuint ilTexture;
     ilGenImages(1, &ilTexture);
     ilBindImage(ilTexture);
 
     // Chargement de l'image
 	if (!ilLoadImage(filename.c_str()))
-		return false;
+		return 0; // I thing 0 means false...
 
 
-    // Récupération de la taille de l'image
+    // Rï¿½cupï¿½ration de la taille de l'image
 	w = ilGetInteger(IL_IMAGE_WIDTH);
 	h = ilGetInteger(IL_IMAGE_HEIGHT);
 	d = ilGetInteger(IL_IMAGE_BPP);
@@ -104,7 +123,7 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
 	if(d==4)
 		ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 
-    // Récupération des pixels de l'image
+    // Rï¿½cupï¿½ration des pixels de l'image
     const unsigned char* Pixels = ilGetData();
 
 	GLubyte* img = new GLubyte[(size_t)(w) * (size_t)(h) * (size_t)(d)];
@@ -115,6 +134,7 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
     ilDeleteImages(1, &ilTexture);
 
 	return img;
+	#endif
 }
 
 
@@ -174,4 +194,3 @@ ivec3 ImageData::getColor(float x, float y)
 */
 
 }
-

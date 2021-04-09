@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <string>
+#include <cstring>
 #include "glInfo.h"
 
 bool	Shader::s_bInitialized = false;
@@ -243,7 +243,7 @@ void Shader::Deactivate()
 }
 
 
-// Le shader doit être activé avant
+// Le shader doit ï¿½tre activï¿½ avant
 void Shader::UniformTexture(const std::string& ext, GLint slot)
 {
 	glActiveTexture(GL_TEXTURE0+slot);
@@ -252,21 +252,21 @@ void Shader::UniformTexture(const std::string& ext, GLint slot)
 	glUniform1iARB(id, slot);
 }
 
-// Le shader doit être activé avant
+// Le shader doit ï¿½tre activï¿½ avant
 void Shader::Uniform(const std::string& ext, GLint value)
 {
 	int id = glGetUniformLocation(m_nProgram, ext.c_str());
 	glUniform1iARB(id, value);
 }
 
-// Le shader doit être activé avant
+// Le shader doit ï¿½tre activï¿½ avant
 void Shader::Uniform(const std::string& ext, GLfloat value)
 {
 	int id = glGetUniformLocation(m_nProgram, ext.c_str());
 	glUniform1fARB(id, value);
 }
 
-// Le shader doit être activé avant
+// Le shader doit ï¿½tre activï¿½ avant
 void Shader::Uniform(const std::string& ext, const vec2& value)
 {
 	int id = glGetUniformLocation(m_nProgram, ext.c_str());
@@ -274,11 +274,9 @@ void Shader::Uniform(const std::string& ext, const vec2& value)
 }
 
 
-// Le shader doit être activé avant
+// Le shader doit ï¿½tre activï¿½ avant
 void Shader::Uniform(const std::string& ext, const vec3& value)
 {
 	int id = glGetUniformLocation(m_nProgram, ext.c_str());
 	glUniform3fvARB(id, 1, value);
 }
-
-
